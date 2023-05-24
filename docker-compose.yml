@@ -1,0 +1,21 @@
+version: '3'
+
+services:
+
+  multichat-rabbitmq:
+    image: rabbitmq:3.11-management
+    restart: always
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
+  multichat-app:
+    image: multichat
+    restart: always
+    ports:
+      - "8080:8080"
+    environment:
+      - RABBIT_IP=multichat-rabbitmq
+    depends_on:
+      multichat-rabbitmq:
+        condition: service_healthy
